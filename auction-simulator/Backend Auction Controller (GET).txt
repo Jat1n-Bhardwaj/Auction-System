@@ -1,0 +1,50 @@
+package com.example.demo;
+
+import org.springframework.web.bind.annotation.*;
+import java.util.*;
+
+@RestController
+@RequestMapping("/api")
+public class BackendApiApplication {
+
+    static class Product {
+        public String name, description;
+        public double basePrice, currentBid;
+        public String highestBidder;
+
+        public Product(String name, String desc, double basePrice) {
+            this.name = name;
+            this.description = desc;
+            this.basePrice = basePrice;
+            this.currentBid = basePrice;
+            this.highestBidder = "None";
+        }
+    }
+
+    private List<Product> products = new ArrayList<>(Arrays.asList(
+        new Product("Laptop", "i5, 8GB RAM", 20000),
+        new Product("Mouse", "Gaming mouse", 1200),
+        new Product("Speaker", "Bluetooth", 1500)
+    ));
+
+    @GetMapping("/products")
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    @PostMapping("/bid")
+    public String placeBid(@RequestParam String name, @RequestParam double bid, @RequestParam String bidder) {
+        for (Product p : products) {
+            if (p.name.equalsIgnoreCase(name)) {
+                if (bid > p.currentBid) {
+                    p.currentBid = bid;
+                    p.highestBidder = bidder;
+                    return "Bid placed successfully!";
+                } else {
+                    return "Bid too low.";
+                }
+            }
+        }
+        return "Product not found.";
+    }
+}

@@ -1,0 +1,9 @@
+Java 21
+
+Spring Boot
+
+OmniDimension Studio
+
+ngrok
+
+IntelliJ IDEA
